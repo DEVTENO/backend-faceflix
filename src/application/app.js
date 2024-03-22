@@ -3,6 +3,7 @@ import cors from 'cors';
 import { connectDatabase } from "./database.js";
 import { apiPublic } from "../routes/api-public.js";
 import { errorMiddleware } from "../middlewares/error-middleware.js";
+import { api } from "../routes/api.js";
 
 connectDatabase();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use(apiPublic);
+app.use(api)
 
 
 app.use(errorMiddleware)

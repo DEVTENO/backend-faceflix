@@ -5,7 +5,16 @@ const register = Joi.object({
     password: Joi.string().min(6).required()
 });
 
+const login =  Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).required()
+});
+
+const get = Joi.string().email().required()
+
 
 export default {
-    register
+    register,
+    login,
+    get
 }
