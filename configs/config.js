@@ -8,6 +8,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const configs = {
     PORT: process.env.PORT || 8080,
+    JWTSECRET:process.env.JWT_SECRET,
     DATABASEURL: process.env.DATABASE_URL
 };
 

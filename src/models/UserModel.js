@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import config from '../../configs/config.js';
 
 const userSchema = mongoose.Schema(
     {
@@ -18,6 +21,14 @@ const userSchema = mongoose.Schema(
         description: String
     }
 )
+
+userSchema.methods.comparePassword = function(password) {
+    return bcrypt.compare(password, this.password);
+}
+
+userSchema.methods.generateToken = function() {
+    return jwt.sign({ _id: this._id }, config.JWTSECRET);
+}
 
 const UserModel = mongoose.model('User', userSchema);
 
