@@ -1,4 +1,4 @@
-import { ResponseError } from "../exception/response-error";
+import { ResponseError } from "../exception/response-error.js";
 
 export async function validation (schema, request) {
     const result = schema.validate(request, {abortEarly: false});

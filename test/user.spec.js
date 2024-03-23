@@ -2,6 +2,9 @@ import supertest from "supertest";
 import { app } from "../src/application/app";
 import mongoose from "mongoose";
 import userTest from "./utils/user-test";
+import path from 'path'
+
+const imageUrl = './profile.jpeg'
 import { connectDatabase } from "../src/application/database";
 
 describe("Users API", () => {
@@ -138,6 +141,29 @@ describe("Users API", () => {
 
       expect(result.status).toBe(401);
       expect(result.body.errors).toBe('Unauthorized')
+    });
+  });
+
+  describe('PUT /api/users/profile', () => {
+    // beforeEach(async () => {
+    //   await userTest.create()
+    // })
+    // afterEach(async () => {
+    //   await userTest.deleteAll();
+    // });
+
+    afterAll(async () => {
+      await mongoose.disconnect();
+    });
+    it('should barbar', async () => {
+      // const urlImage = './profile.jpeg'
+      const filePath = path.resolve(__dirname, '../public/profile.jpeg');
+      const result = await supertest(app).post('/api/users/profile')
+        .attach('profileImage', filePath);
+        // .attach('backgroundImage', '../public/profile.png')
+
+      console.log(result.text);
+      expect(result.status).toBe(200)
     });
   });
 });
