@@ -140,4 +140,70 @@ describe("Users API", () => {
       expect(result.body.errors).toBe('Unauthorized')
     });
   });
+
+  describe('PATCH /api/users/current/profile', () => {
+    beforeEach(async () => {
+      await userTest.create()
+    })
+    afterEach(async () => {
+      await userTest.deleteAll();
+    });
+
+    afterAll(async () => {
+      await mongoose.disconnect();
+    });
+    it('should update user', async () => {
+
+      const token = await supertest(app).post("/api/users/login").send({
+        email: "test@gmail.com",
+        password: "testing",
+      });
+
+      // path.resolve(__dirname, './profile.png');
+      // console.log(process.pwd()+ '');
+      const filePath = './test/profile.png'
+
+      await supertest(app).patch('/api/users/current/profile')
+        .set('AUTHORIZATION', `Bearer ${token.body.data.token}`)
+        .attach('profileImage', filePath)
+        .attach('backgroundImage', filePath)
+        .field('name', 'super test')
+
+      const result = await supertest(app).patch('/api/users/current/profile')
+        .set('AUTHORIZATION', `Bearer ${token.body.data.token}`)
+        .attach('profileImage', filePath)
+        .attach('backgroundImage', filePath)
+        .field('name', 'super test')
+
+      expect(result.status).toBe(200)
+      expect(result.body.data).toBe("OK")
+    });
+
+    it('should reject if data invalid', async () => {
+
+      const token = await supertest(app).post("/api/users/login").send({
+        email: "test@gmail.com",
+        password: "testing",
+      });
+
+      const result = await supertest(app).patch('/api/users/current/profile')
+        .set('AUTHORIZATION', `Bearer ${token.body.data.token}`)
+        .field('name', 'sup')
+
+      console.log(result.body);
+      expect(result.status).toBe(400);
+      expect(result.body.errors).toBeDefined();
+    });
+
+    it('should reject if token invalid', async () => {
+
+      const result = await supertest(app).patch('/api/users/current/profile')
+        .set('AUTHORIZATION', `Bearer akwokawo.akwkaowa.oawkdwa`)
+        .field('name', 'super')
+
+      expect(result.status).toBe(401);
+      expect(result.body.errors).toBe('Unauthorized');
+    });
+  })
+  
 });
