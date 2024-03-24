@@ -46,21 +46,14 @@ const update = async (req, res, next) => {
 
     try {
         console.log(req.files);
-        // console.log('ini jalan');
-        const profileImage = req.files['profileImage'][0];
-        const base64 = profileImage.buffer.toString('base64');
-        console.log(base64);
-        // const backgroundImage = req.files['backgroundImage'][0];
-
-        // if (!profileImage || !backgroundImage) {
-        //     return res.status(400).send('Both profileImage and backgroundImage are required');
-        // }
-        // res.send('Files uploaded successfully');
+        const profileImage = req.files['profileImage'][0].filename;
+        const backgroundImage = req.files['backgroundImage'][0].filename;
 
         res.status(200).json({
             data: {
                 name: "testUser",
-                profileImage: profileImage,
+                profileImage: req.protocol+ '://'+ req.hostname + '/public/uploads/profile/' +profileImage,
+                backgroundImage: req.protocol+ '://'+ req.hostname+ '/public/uploads/background/' +backgroundImage,
             }
         })
     } catch (error) {
