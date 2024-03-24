@@ -52,8 +52,8 @@ const update = async (req, res, next) => {
         res.status(200).json({
             data: {
                 name: "testUser",
-                profileImage: req.protocol+ '://'+ req.hostname + '/public/uploads/profile/' +profileImage,
-                backgroundImage: req.protocol+ '://'+ req.hostname+ '/public/uploads/background/' +backgroundImage,
+                profileImage: req.protocol+ '://'+ req.host + '/public/uploads/profile/' +profileImage,
+                backgroundImage: req.protocol+ '://'+ req.host+ '/public/uploads/background/' +backgroundImage,
             }
         })
     } catch (error) {

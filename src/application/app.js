@@ -10,7 +10,8 @@ import path from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 let __dirname = path.dirname(__filename);
-__dirname = path.resolve(__dirname, '../../public');
+const profileImg =  path.resolve(__dirname, '../../public/uploads/profile');
+const backgroundImg =  path.resolve(__dirname, '../../public/uploads/profile');
 
 
 connectDatabase();
@@ -19,7 +20,8 @@ export const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/public',express.static(__dirname));
+app.use('/public/uploads/profile/',express.static(profileImg));
+app.use('/public/uploads/background/',express.static(backgroundImg));
 app.use(apiPublic);
 app.use(api)
 

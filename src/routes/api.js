@@ -7,5 +7,5 @@ export const api = express.Router();
 
 api.post('/api/users/profile', userUpload.fields([{name: 'profileImage', maxCount:1}, {name:'backgroundImage', maxCount:1}]), userController.update)
 
-// api.use(authMiddleware)
+api.use(authMiddleware)
 api.get('/api/users/current', userController.get)
