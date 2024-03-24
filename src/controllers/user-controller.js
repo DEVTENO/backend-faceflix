@@ -41,10 +41,52 @@ const get = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
+};
+
+const update = async (req, res, next) => {
+    try {
+        const user = req.user;
+        const request = {
+            email: req.body.email,
+            name: req.body.name,
+            title: req.body.title,
+            description: req.body.description,
+            password: req.body.password,
+        };
+
+        if (req.files['profileImage']) {
+            const profileImageFile = req.files['profileImage'][0];
+            request.profileImage = {
+                filename: profileImageFile.filename,
+                mimetype: profileImageFile.mimetype,
+                size: profileImageFile.size
+            };
+        }
+
+        if (req.files['backgroundImage']) {
+            const backgroundImageFile = req.files['backgroundImage'][0];
+            request.backgroundImage = {
+                filename: backgroundImageFile.filename,
+                mimetype: backgroundImageFile.mimetype,
+                size: backgroundImageFile.size
+            };
+        }
+
+        console.log(request);
+        const result = await userService.update(user, request, req.protocol, req.host)
+        res.status(200).json({
+            statusCode: 200,
+            data: "OK"
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export default {
     register,
     login,
-    get
+    get,
+    update
 }
