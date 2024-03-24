@@ -1,13 +1,13 @@
-import { ResponseError } from "../exception/response-error";
-import UserModel from "../models/UserModel";
-import userValidation from "../validation/user-validation";
-import { validation } from "../validation/validation"
+import { ResponseError } from "../exception/response-error.js";
+import UserModel from "../models/UserModel.js";
+import userValidation from "../validation/user-validation.js";
+import { validation } from "../validation/validation.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
-import ImageModel from "../models/ImageModel";
-import VideoModel from "../models/VideoModel";
-import BlogModel from "../models/BlogModel";
+import ImageModel from "../models/ImageModel.js";
+import VideoModel from "../models/VideoModel.js";
+import BlogModel from "../models/BlogModel.js";
 dotenv.config();
 
 const register = async (request) => {

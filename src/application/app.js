@@ -17,6 +17,6 @@ app.use(api)
 
 app.use(errorMiddleware)
 
-// app.listen(configs.PORT, () => {
-//     console.log('Listening on port: ', configs.PORT);
+// app.listen(3000, () => {
+//     console.log('Listening on port: ', 3000);
 // });
