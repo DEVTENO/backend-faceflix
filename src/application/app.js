@@ -13,6 +13,7 @@ app.use(cors());
 
 app.use('/public/user/profile', express.static('./public/user-profile/profile/'));
 app.use('/public/user/background/', express.static('./public/user-profile/background'));
+app.use('/public/user/image/', express.static('./public/post-image'));
 
 app.use(apiPublic);
 app.use(api)

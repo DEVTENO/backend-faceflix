@@ -2,6 +2,7 @@ import express from "express";
 import userController from "../controllers/user-controller.js";
 import { authMiddleware } from "../middlewares/auth-middleware.js";
 import { userUpload } from "../application/multer.js";
+import imageController from "../controllers/image-controller.js";
 
 export const api = express.Router();
 
@@ -16,3 +17,6 @@ api.patch(
   ]),
   userController.update
 );
+api.post('/api/users/:userId/image', userUpload.fields([{name: "image", maxCount:1}]), imageController.create);
+api.get('/api/users/:userId/image', imageController.listByUserId);
+api.get('/api/users/:userId/image/:imageId', imageController.getDetailImage)
