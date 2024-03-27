@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
 
 const imageSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    userId: mongoose.Schema.Types.ObjectId,
-    image: String,
-    title: String,
+    userId: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
     description: String,
 }, {
     timestamps: true
