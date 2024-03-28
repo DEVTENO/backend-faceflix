@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
 
 const blogSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    userId: mongoose.Schema.Types.ObjectId,
-    title: String,
-    text: String
+    userId: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    text: {
+        type: String,
+        required: true
+    }
 }, {
     timestamps: true
 });
