@@ -4,6 +4,7 @@ import { authMiddleware } from "../middlewares/auth-middleware.js";
 import { userUpload, videoUpload } from "../application/multer.js";
 import imageController from "../controllers/image-controller.js";
 import videoController from "../controllers/video-controller.js";
+import blogController from "../controllers/blog-controller.js";
 
 export const api = express.Router();
 
@@ -28,3 +29,8 @@ api.get('/api/users/:userId/image/:imageId', imageController.getDetailImage)
 api.post('/api/users/:userId/video', videoUpload.fields([{name:'video', maxCount:1}]), videoController.create)
 api.get('/api/users/:userId/video', videoController.listByUserId);
 api.get('/api/users/:userId/video/:videoId', videoController.getDetailVideo);
+
+// Blog Api
+api.post('/api/users/:userId/blog', blogController.create);
+api.get('/api/users/:userId/blog', blogController.listByUserId);
+api.get('/api/users/:userId/blog/:blogId', blogController.getDetailblog)
