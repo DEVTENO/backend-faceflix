@@ -1,29 +1,40 @@
+// Library
 import express from "express";
-import cors from 'cors';
-import { connectDatabase } from "./database.js";
-import { apiPublic } from "../routes/api-public.js";
+
+// Middleware
+import cors from "cors";
 import { errorMiddleware } from "../middlewares/error-middleware.js";
+
+// Route
+import { apiPublic } from "../routes/api-public.js";
 import { api } from "../routes/api.js";
 
+// Database
+import { connectDatabase } from "./database.js";
 connectDatabase();
 
 export const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/public/user/profile', express.static('./public/user-profile/profile/'));
-app.use('/public/user/background/', express.static('./public/user-profile/background'));
-app.use('/public/user/image/', express.static('./public/post-image'));
-app.use('/public/user/video/', express.static('./public/post-video'));
+app.use(
+  "/public/user/profile",
+  express.static("./public/user-profile/profile/")
+);
+app.use(
+  "/public/user/background/",
+  express.static("./public/user-profile/background")
+);
+app.use("/public/user/image/", express.static("./public/post-image"));
+app.use("/public/user/video/", express.static("./public/post-video"));
 
 app.use(apiPublic);
-app.use(api)
+app.use(api);
 
-
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
 app.listen(3000, () => {
-    console.log('Listening on port: ', 3000);
-    // console.log(path.join(__dirname, './public/user-profile/profile'));
-    // console.log(process.cwd())
+  console.log("Listening on port: ", 3000);
+  // console.log(path.join(__dirname, './public/user-profile/profile'));
+  // console.log(process.cwd())
 });

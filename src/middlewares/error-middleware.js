@@ -11,7 +11,7 @@ export const errorMiddleware = async (err, req, res, next) => {
     res.status(err.statusCode).json({
       errors: err.message,
     });
-  } else if(err instanceof MulterError) {
+  } else if (err instanceof MulterError) {
     res.status(400).json({
       errors: err.message,
     });

@@ -56,11 +56,6 @@ const login = async (request) => {
     const payload = {
       id: user.id,
       email: user.email,
-      name: user.name,
-      title: user.title,
-      profileImage: user.profileImage,
-      backgroundImage: user.backgroundImage,
-      description: user.description,
     };
     const expire = 60 * 60 * 1;
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -90,11 +85,11 @@ const get = async (email) => {
   return {
     id: user.id,
     email: user.email,
-    name: user.name,
-    title: user.title,
-    profileImage: user.profileImage,
-    backgroundImage: user.backgroundImage,
-    description: user.description,
+    name: user.name || '',
+    title: user.title || '',
+    profileImage: user.profileImage || '',
+    backgroundImage: user.backgroundImage || '',
+    description: user.description || '',
     countImage: postImage.length,
     countVideo: postVideo.length,
     countBlog: postBlog.length,
@@ -102,7 +97,6 @@ const get = async (email) => {
 };
 
 const update = async (user, request, protocol, host) => {
-  console.log(request);
   const userRequest = await validation(userValidation.update, request);
   const userCurrent = await UserModel.findById(user.id);
   if (!userCurrent) {
@@ -157,7 +151,7 @@ const update = async (user, request, protocol, host) => {
       "/public/user/background/" +
       userRequest.backgroundImage.filename;
   }  
-  return await UserModel.updateOne({ _id: user.id }, { $set: data });
+  await UserModel.updateOne({ _id: user.id }, { $set: data });
 };
 
 export default {
