@@ -6,23 +6,22 @@ import { connectDatabase } from "../src/application/database";
 
 describe("Users API", () => {
   
-  // afterAll(async () => {
-  //   await mongoose.disconnect();
-  // });
+  afterAll(async () => {
+    await mongoose.disconnect();
+  });
   describe("POST /api/users/register", () => {
     afterEach(async () => {
       await userTest.deleteAll();
     });
 
-    afterAll(async () => {
-      await mongoose.disconnect();
-    });
 
     it("should create user", async () => {
       const result = await supertest(app).post("/api/users/register").send({
         email: "test@gmail.com",
         password: "testing",
       });
+
+      console.log(result.body);
 
       expect(result.status).toBe(201);
       expect(result.body.data).toBe("OK");
@@ -34,6 +33,7 @@ describe("Users API", () => {
         password: "",
       });
 
+      console.log(result.body);
       expect(result.status).toBe(400);
       expect(result.body.errors).toBeDefined();
     });
@@ -48,6 +48,8 @@ describe("Users API", () => {
         password: "testing",
       });
 
+      console.log(result.body);
+
       expect(result.status).toBe(400);
       expect(result.body.errors).toBe("user already exist");
     });
@@ -61,15 +63,14 @@ describe("Users API", () => {
       await userTest.deleteAll();
     });
 
-    afterAll(async () => {
-      await mongoose.disconnect();
-    });
 
     it('should login user', async () => {
       const result = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
         password: "testing",
       });
+
+      console.log(result.body);
 
       expect(result.status).toBe(200);
       expect((result.body.data.user)).toBeDefined()
@@ -82,6 +83,8 @@ describe("Users API", () => {
         password: "testing1",
       });
 
+      console.log(result.body);
+
       expect(result.status).toBe(400);
       expect((result.body.errors)).toBe('username or password is wrong')
     });
@@ -92,6 +95,8 @@ describe("Users API", () => {
         password: "testing",
       });
 
+      console.log(result.body);
+
       expect(result.status).toBe(400);
       expect((result.body.errors)).toBe('username or password is wrong')
     });
@@ -101,6 +106,8 @@ describe("Users API", () => {
         email: "",
         password: "",
       });
+
+      console.log(result.body);
 
       expect(result.status).toBe(400);
       expect((result.body.errors)).toBeDefined()
@@ -115,8 +122,12 @@ describe("Users API", () => {
       await userTest.deleteAll();
     });
 
-    afterAll(async () => {
-      await mongoose.disconnect();
+    it('should reject if token invalid', async () => {
+      const result = await supertest(app).get('/api/users/current')
+        .set('AUTHORIZATION', `Bearer kawdokoawdo.adokaowd.aodowakd`);
+
+      expect(result.status).toBe(401);
+      expect(result.body.errors).toBe('Unauthorized')
     });
 
     it('should get current user', async () => {
@@ -128,17 +139,13 @@ describe("Users API", () => {
       const result = await supertest(app).get('/api/users/current')
         .set('AUTHORIZATION', `Bearer ${token.body.data.token}`);
 
+        console.log(result.body);
+
       expect(result.status).toBe(200);
       expect(result.body.data).toBeDefined()
     });
+    
 
-    it('should reject if token invalid', async () => {
-      const result = await supertest(app).get('/api/users/current')
-        .set('AUTHORIZATION', `Bearer kawdokoawdo.adokaowd.aodowakd`);
-
-      expect(result.status).toBe(401);
-      expect(result.body.errors).toBe('Unauthorized')
-    });
   });
 
   describe('PATCH /api/users/current/profile', () => {
@@ -149,9 +156,18 @@ describe("Users API", () => {
       await userTest.deleteAll();
     });
 
-    afterAll(async () => {
-      await mongoose.disconnect();
+    it('should reject if token invalid', async () => {
+
+      const result = await supertest(app).patch('/api/users/current/profile')
+        .set('AUTHORIZATION', `Bearer akwokawo.akwkaowa.oawkdwa`)
+        .field('name', 'super')
+
+      console.log(result.body);
+
+      expect(result.status).toBe(401);
+      expect(result.body.errors).toBe('Unauthorized');
     });
+
     it('should update user', async () => {
 
       const token = await supertest(app).post("/api/users/login").send({
@@ -159,9 +175,7 @@ describe("Users API", () => {
         password: "testing",
       });
 
-      // path.resolve(__dirname, './profile.png');
-      // console.log(process.pwd()+ '');
-      const filePath = './test/profile.png'
+      const filePath = './test/file/profile.png'
 
       await supertest(app).patch('/api/users/current/profile')
         .set('AUTHORIZATION', `Bearer ${token.body.data.token}`)
@@ -174,6 +188,8 @@ describe("Users API", () => {
         .attach('profileImage', filePath)
         .attach('backgroundImage', filePath)
         .field('name', 'super test')
+
+      console.log(result.body);
 
       expect(result.status).toBe(200)
       expect(result.body.data).toBe("OK")
@@ -195,15 +211,6 @@ describe("Users API", () => {
       expect(result.body.errors).toBeDefined();
     });
 
-    it('should reject if token invalid', async () => {
-
-      const result = await supertest(app).patch('/api/users/current/profile')
-        .set('AUTHORIZATION', `Bearer akwokawo.akwkaowa.oawkdwa`)
-        .field('name', 'super')
-
-      expect(result.status).toBe(401);
-      expect(result.body.errors).toBe('Unauthorized');
-    });
   })
   
 });

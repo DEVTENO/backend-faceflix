@@ -21,7 +21,7 @@ describe("Image API", () => {
     it("should reject if token invalid", async () => {
       const user = await userTest.get();
 
-      const video = process.cwd() + "/test/video-testing.mp4";
+      const video = process.cwd() + "/test/file/video-testing.mp4";
 
       const result = await supertest(app)
         .post(`/api/users/${user.id}/video`)
@@ -44,7 +44,7 @@ describe("Image API", () => {
         password: "testing",
       });
 
-      const video = process.cwd() + "/test/video-testing.mp4";
+      const video = process.cwd() + "/test/file/video-testing.mp4";
 
       const result = await supertest(app)
         .post(`/api/users/${user.id}/video`)
@@ -87,7 +87,7 @@ describe("Image API", () => {
         password: "testing",
       });
 
-      const video = process.cwd() + "/test/video-testing.mp4";
+      const video = process.cwd() + "/test/file/video-testing.mp4";
 
       const result = await supertest(app)
         .post(`/api/users/${user.id}/video`)
@@ -131,7 +131,7 @@ describe("Image API", () => {
       expect(result.body.data).toBeDefined();
     });
 
-    it("should get list video by userid", async () => {
+    it("should get list not found video by userid", async () => {
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
         password: "testing",
