@@ -194,7 +194,7 @@ describe("Image API", () => {
       expect(result.body.errors).toBeDefined();
     });
 
-    it("should reject if videoId invalid", async () => {
+    it("should reject if userId invalid", async () => {
       const video = await videoTest.get();
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
