@@ -1,24 +1,26 @@
-import imageService from "../services/image-service";
+import videoService from "../services/video-service";
 
 const create = async (req, res, next) => {
     try {
         const user = req.user;
-        if(!req.files['image']){
-            res.status(400).json({errors: "not file send"})
+        if(!req.files['video']){
+            res.status(400).json({
+                errors: 'video not send'
+            })
         }
-        const imageFile = req.files['image'][0];
-        console.log(imageFile);
+        const videoFile = req.files['video'][0];
+        console.warn(videoFile);
         const request = {
             userId: req.params.userId,
             title: req.body.title,
             description: req.body.description,
-            image : {
-                filename: imageFile.filename,
-                mimetype: imageFile.mimetype,
-                size: imageFile.size
+            video: {
+                filename: videoFile.filename,
+                mimetype: videoFile.mimetype,
+                size: videoFile.size,
             }
         }
-        const result = await imageService.create(user, request, req.protocol, req.host);
+        const result = await videoService.create(user, request, req.protocol, req.host);
         res.status(200).json({
             statusCode: 200,
             data: result
@@ -31,7 +33,7 @@ const create = async (req, res, next) => {
 const listByUserId = async (req, res, next) => {
     try {
         const userId = req.params.userId;
-        const result = await imageService.listByUserId(userId);
+        const result = await videoService.listByUserId(userId);
         res.status(200).json({
             statusCode: 200,
             data: result
@@ -41,24 +43,26 @@ const listByUserId = async (req, res, next) => {
     }
 }
 
-const getDetailImage = async (req, res, next) => {
+
+const getDetailVideo = async (req, res, next) => {
     try {
         const request = {
             userId: req.params.userId,
-            imageId: req.params.imageId,
+            videoId: req.params.videoId
         }
-        const result = await imageService.getDetailImage(request);
+
+        const result = await videoService.getDetailVideo(request);
         res.status(200).json({
             statusCode: 200,
             data: result
         })
     } catch (error) {
-        next(error)
+        next(error);
     }
 }
 
 export default {
     create,
     listByUserId,
-    getDetailImage
+    getDetailVideo
 }

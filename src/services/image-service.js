@@ -12,7 +12,8 @@ const create = async (user, request, protocol, host) => {
     const requestImage = await validation(imageValidation.create, request, async () => {
         await fs.unlink(imageDelete + "/" + request.image.filename);
     });
-    if(user.id != request.userId){
+    if(user.id != requestImage.userId){
+        await fs.unlink(imageDelete + "/" + request.image.filename);
         throw new ResponseError(400, 'not create image')
     };
     const userInDatabase = await UserModel.findById(user.id);
@@ -42,14 +43,13 @@ const create = async (user, request, protocol, host) => {
 }
 
 const listByUserId = async (userId) => {
-    console.warn('ini jalan');
-    console.warn(userId);
     const requestUserId = await validation(imageValidation.listByUserId, userId);
     const images = await ImageModel.find({userId : requestUserId});
     let result = images;
     if(images.length >= 1) {
          result = images.map((image) => ({
             id: image.id,
+            userId: image.userId,
             title: image.title,
             description: image.description,
             image: image.image,
