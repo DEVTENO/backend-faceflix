@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
 
 const videoSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    userId: mongoose.Schema.Types.ObjectId,
-    video: String,
-    title: String,
+    userId: {
+        type: String,
+        required: true
+    },
+    video: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
     description: String,
 }, {
     timestamps: true
