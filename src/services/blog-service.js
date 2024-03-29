@@ -66,7 +66,7 @@ const getDetailblog = async (request) => {
     id: blog.id,
     userId: blog.userId,
     title: blog.title,
-    text: blog.title,
+    text: blog.text,
     createdAt: blog.createdAt,
     updatedAt: blog.updatedAt,
   };

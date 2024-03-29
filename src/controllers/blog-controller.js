@@ -10,8 +10,8 @@ const create = async (req, res, next) => {
     };
 
     await blogService.create(user, request);
-    res.status(200).json({
-      statusCode: 200,
+    res.status(201).json({
+      statusCode: 201,
       data: 'OK',
     });
   } catch (error) {

@@ -52,6 +52,11 @@ const update = async (req, res, next) => {
       description: req.body.description,
       password: req.body.password,
     };
+    for (const key in request) {
+        if (request[key] === "") {
+          delete request[key];
+        }
+      }
 
     if (req.files["profileImage"]) {
       const profileImageFile = req.files["profileImage"][0];
