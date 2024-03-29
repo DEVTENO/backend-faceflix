@@ -36,7 +36,7 @@ describe("Blog API", () => {
 
       console.log(result.body);
 
-      expect(result.status).toBe(200);
+      expect(result.status).toBe(201);
       expect(result.body).toBeDefined();
     });
 
