@@ -1,76 +1,45 @@
-// Library
 import multer from "multer";
 import path from "path";
-
-// Exception
 import { ResponseError } from "../exception/response-error.js";
 
-const profileImage = process.cwd() + "/public/user-profile/profile";
-const backgroundImage = process.cwd() + "/public/user-profile/background";
-const image = process.cwd() + "/public/post-image";
-const video = process.cwd() + "/public/post-video";
-
-const usersStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    if (file.fieldname === "profileImage") {
-      cb(null, profileImage);
-    } else if (file.fieldname === "backgroundImage") {
-      cb(null, backgroundImage);
-    } else if (file.fieldname === "image") {
-      cb(null, image);
-    } else if (file.fieldname === "video") {
-      cb(null, video);
+class FileUpload {
+  constructor(limits, destinations, filters) {
+    this.storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, destinations[file.fieldname]);
+      },
+      filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+      },
+    });
+    this.fileFilter= function (req, file, cb) {
+      if (filters.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new ResponseError(400, "File type not supported"));
+      }
     }
-  },
-  filename: function (req, file, cb) {
-    if (file.fieldname === "profileImage") {
-      cb(null, "profile-" + Date.now() + path.extname(file.originalname));
-    } else if (file.fieldname === "backgroundImage") {
-      cb(null, "background-" + Date.now() + path.extname(file.originalname));
-    } else if (file.fieldname === "image") {
-      cb(null, "image-" + Date.now() + path.extname(file.originalname));
-    } else if (file.fieldname === "video") {
-      cb(null, "video-" + Date.now() + path.extname(file.originalname));
-    }
-  },
-});
-
-const userFilter = (req, file, cb) => {
-  if (
-    file.fieldname === "profileImage" ||
-    file.fieldname === "backgroundImage" ||
-    file.fieldname === "image"
-  ) {
-    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-      cb(null, true);
-    } else {
-      cb(new ResponseError(400, "Only JPEG/PNG images are allowed"));
-    }
-  } else if (file.fieldname === "video") {
-    if (
-      file.mimetype === "video/mp4" ||
-      file.mimetype === "video/x-matroska" ||
-      file.mimetype === "video/x-matroska-3d"
-    ) {
-      cb(null, true);
-    } else {
-      cb(new ResponseError(400, "Only MP4/MKV videos are allowed"));
-    }
-  } else {
-    cb(null, true);
+    this.upload = multer({
+      storage: this.storage,
+      limits: limits,
+      fileFilter: this.fileFilter
+    });
   }
+}
+
+const destinations = {
+  profileImage: process.cwd() + "/public/user-profile/profile",
+  backgroundImage: process.cwd() + "/public/user-profile/background",
+  image: process.cwd() + "/public/post-image",
+  video: process.cwd() + "/public/post-video",
 };
 
-const userUpload = multer({
-  storage: usersStorage,
-  limits: { fileSize: 2 * 1024 * 1024 },
-  fileFilter: userFilter,
-});
+const filters = {
+  image: ["image/jpeg", "image/png"],
+  video: ["video/mp4", "video/x-matroska", "video/x-matroska-3d"]
+};
 
-const videoUpload = multer({
-  storage: usersStorage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: userFilter,
-});
+const imageUpload = new FileUpload({ fileSize: 2 * 1024 * 1024 }, destinations, filters.image);
+const videoUpload = new FileUpload({ fileSize: 5 * 1024 * 1024 }, destinations, filters.video);
 
-export { userUpload, videoUpload };
+export { videoUpload, imageUpload };

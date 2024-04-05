@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import imageTest from "./utils/image-test";
+import ImageTest from "./utils/image-test";
 import supertest from "supertest";
 import { app } from "../src/application/app";
-import userTest from "./utils/user-test";
+import UserTest from "./utils/user-test";
 
 describe("Image API", () => {
   afterAll(async () => {
@@ -11,15 +11,15 @@ describe("Image API", () => {
 
   describe("POST /api/users/:userId/image", () => {
     beforeEach(async () => {
-      await userTest.create();
+      await UserTest.create();
     });
     afterEach(async () => {
-      await imageTest.deleteAll();
-      await userTest.deleteAll();
+      await ImageTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should create post image", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -42,7 +42,7 @@ describe("Image API", () => {
     });
 
     it("should reject if file not send", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -62,7 +62,7 @@ describe("Image API", () => {
     });
 
     it("should reject if data invalid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -108,16 +108,16 @@ describe("Image API", () => {
 
   describe("GET /api/users/:userId/image", () => {
     beforeEach(async () => {
-      await userTest.create();
-      await imageTest.create();
+      await UserTest.create();
+      await ImageTest.create();
     });
     afterEach(async () => {
-      await imageTest.deleteAll();
-      await userTest.deleteAll();
+      await ImageTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should get image with userId", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -135,7 +135,7 @@ describe("Image API", () => {
     });
 
     it("should reject if token invalid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const result = await supertest(app)
         .get(`/api/users/${user.id}/image`)
@@ -150,17 +150,17 @@ describe("Image API", () => {
 
   describe("GET /api/users/:userId/image/:imageId", () => {
     beforeEach(async () => {
-      await userTest.create();
-      await imageTest.create();
+      await UserTest.create();
+      await ImageTest.create();
     });
     afterEach(async () => {
-      await imageTest.deleteAll();
-      await userTest.deleteAll();
+      await ImageTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should get detail image", async () => {
-      const user = await userTest.get();
-      const image = await imageTest.get();
+      const user = await UserTest.get();
+      const image = await ImageTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -176,7 +176,7 @@ describe("Image API", () => {
     });
 
     it("should reject if image not found", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",

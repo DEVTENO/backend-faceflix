@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import supertest from "supertest";
 import { app } from "../src/application/app";
-import userTest from "./utils/user-test";
-import videoTest from "./utils/video-test";
+import UserTest from "./utils/user-test";
+import VideoTest from "./utils/video-test";
 
 describe("Image API", () => {
   afterAll(async () => {
@@ -11,15 +11,15 @@ describe("Image API", () => {
 
   describe("POST /api/users/:userId/video", () => {
     beforeEach(async () => {
-      await userTest.create();
+      await UserTest.create();
     });
     afterEach(async () => {
-      await videoTest.deleteAll();
-      await userTest.deleteAll();
+      await VideoTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should reject if token invalid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const video = process.cwd() + "/test/file/video-testing.mp4";
 
@@ -37,7 +37,7 @@ describe("Image API", () => {
     });
 
     it("should create post video", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -60,7 +60,7 @@ describe("Image API", () => {
     });
 
     it("should reject if file not send", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -80,7 +80,7 @@ describe("Image API", () => {
     });
 
     it("should reject if data invalid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -105,16 +105,16 @@ describe("Image API", () => {
 
   describe("GET /api/users/:userId/video", () => {
     beforeEach(async () => {
-      await userTest.create();
-      await videoTest.create();
+      await UserTest.create();
+      await VideoTest.create();
     });
     afterEach(async () => {
-      await videoTest.deleteAll();
-      await userTest.deleteAll();
+      await VideoTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should get list video by userid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -150,17 +150,17 @@ describe("Image API", () => {
 
   describe("GET /api/users/:userId/video/:videoId", () => {
     beforeEach(async () => {
-      await userTest.create();
-      await videoTest.create();
+      await UserTest.create();
+      await VideoTest.create();
     });
     afterEach(async () => {
-      await videoTest.deleteAll();
-      await userTest.deleteAll();
+      await VideoTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should get detail video with userId and videoId", async () => {
-      const user = await userTest.get();
-      const video = await videoTest.get();
+      const user = await UserTest.get();
+      const video = await VideoTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -178,7 +178,7 @@ describe("Image API", () => {
     });
 
     it("should reject if videoId invalid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
         password: "testing",
@@ -195,7 +195,7 @@ describe("Image API", () => {
     });
 
     it("should reject if userId invalid", async () => {
-      const video = await videoTest.get();
+      const video = await VideoTest.get();
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
         password: "testing",

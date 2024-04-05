@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { app } from "../src/application/app";
 import mongoose from "mongoose";
-import userTest from "./utils/user-test";
+import UserTest from "./utils/user-test";
 import { connectDatabase } from "../src/application/database";
 
 describe("Users API", () => {
@@ -11,7 +11,7 @@ describe("Users API", () => {
   });
   describe("POST /api/users/register", () => {
     afterEach(async () => {
-      await userTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
 
@@ -57,10 +57,10 @@ describe("Users API", () => {
 
   describe('POST /api/users/login', () => {
     beforeEach(async () => {
-      await userTest.create()
+      await UserTest.create()
     })
     afterEach(async () => {
-      await userTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
 
@@ -116,10 +116,10 @@ describe("Users API", () => {
 
   describe('GET /api/users/current', () => {
     beforeEach(async () => {
-      await userTest.create()
+      await UserTest.create()
     })
     afterEach(async () => {
-      await userTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it('should reject if token invalid', async () => {
@@ -150,10 +150,10 @@ describe("Users API", () => {
 
   describe('PATCH /api/users/current/profile', () => {
     beforeEach(async () => {
-      await userTest.create()
+      await UserTest.create()
     })
     afterEach(async () => {
-      await userTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it('should reject if token invalid', async () => {

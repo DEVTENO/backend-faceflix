@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { app } from "../src/application/app";
-import blogTest from "./utils/blog-test";
-import userTest from "./utils/user-test";
+import BlogTest from "./utils/blog-test";
+import UserTest from "./utils/user-test";
 import mongoose from "mongoose";
 
 describe("Blog API", () => {
@@ -11,15 +11,15 @@ describe("Blog API", () => {
 
   describe("POST /api/users/:userId/blog/", () => {
     beforeEach(async () => {
-      await userTest.create();
+      await UserTest.create();
     });
     afterEach(async () => {
-      await blogTest.deleteAll();
-      await userTest.deleteAll();
+      await BlogTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should create blog", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -41,7 +41,7 @@ describe("Blog API", () => {
     });
 
     it("should reject if data invalid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -65,16 +65,16 @@ describe("Blog API", () => {
 
   describe("GET /api/users/:userId/blog", () => {
     beforeEach(async () => {
-      await userTest.create();
-      await blogTest.create();
+      await UserTest.create();
+      await BlogTest.create();
     });
     afterEach(async () => {
-      await blogTest.deleteAll();
-      await userTest.deleteAll();
+      await BlogTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should get list blog with userId", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -110,17 +110,17 @@ describe("Blog API", () => {
 
   describe("GET /api/users/:userId/blog/:blogId", () => {
     beforeEach(async () => {
-      await userTest.create();
-      await blogTest.create();
+      await UserTest.create();
+      await BlogTest.create();
     });
     afterEach(async () => {
-      await blogTest.deleteAll();
-      await userTest.deleteAll();
+      await BlogTest.deleteAll();
+      await UserTest.deleteAll();
     });
 
     it("should get detail blog with userId and blogId", async () => {
-      const user = await userTest.get();
-      const blog = await blogTest.get();
+      const user = await UserTest.get();
+      const blog = await BlogTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -138,7 +138,7 @@ describe("Blog API", () => {
     });
 
     it("should reject if blogId invalid", async () => {
-      const user = await userTest.get();
+      const user = await UserTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
@@ -156,7 +156,7 @@ describe("Blog API", () => {
     });
 
     it("should reject if userId invalid", async () => {
-      const blog = await blogTest.get();
+      const blog = await BlogTest.get();
 
       const token = await supertest(app).post("/api/users/login").send({
         email: "test@gmail.com",
