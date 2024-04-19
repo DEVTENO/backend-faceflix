@@ -120,7 +120,7 @@ const update = async (user, request, protocol, host) => {
   const data = {};
 
   if (userRequest.password) {
-    userRequest.password = await bcrypt.hash(userRequest, 10);
+    userRequest.password = await bcrypt.hash(userRequest.password, 10);
     data.password = userRequest.password;
   }
   if (userRequest.name) {
